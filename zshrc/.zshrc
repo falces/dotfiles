@@ -319,4 +319,5 @@ if command -v pyenv 1>/dev/null 2>&1; then
 fi
 
 PATH=$(pyenv root)/shims:$PATH
-# EOF Pyenv
+# EOF Pyenvsource /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /Users/create/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
