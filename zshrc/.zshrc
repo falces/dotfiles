@@ -1,0 +1,322 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in $ZSH/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment one of the following lines to change the auto-update behavior
+# zstyle ':omz:update' mode disabled  # disable automatic updates
+# zstyle ':omz:update' mode auto      # update automatically without asking
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+
+# Uncomment the following line to change how often to auto-update (in days).
+# zstyle ':omz:update' frequency 13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS="true"
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# You can also set it to another string to have that shown instead of the default red dots.
+# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+
+plugins=(
+  git
+  bundler
+  dotenv
+  macos
+  rake
+  rbenv
+  ruby
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  docker
+  docker-compose
+  ssh-agent
+  virtualenv
+)
+
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status virtualenv)
+export PATH="$(brew --prefix)/bin:$PATH"
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# Set personal aliases,c overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+
+
+# PowerLevel Customization
+POWERLEVEL9K_DIR_HOME_BACKGROUND='045'
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='045'
+POWERLEVEL9K_DIR_ETC_BACKGROUND='045'
+POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='045'
+
+POWERLEVEL9K_VIRTUALENV_BACKGROUND="clear"
+POWERLEVEL9K_VIRTUALENV_FOREGROUND="cyan"
+
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(virtualenv pyenv time)
+POWERLEVEL9K_SHORTEN_STRATEGY=truncate_from_right
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
+# PowerLevel Customization
+
+# Antigen Plugin
+source ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/antigen/antigen.zsh
+
+# Autosuggestions Plugin
+source ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+export DEFAULT_USER="$(whoami)"
+
+# System Aliases
+alias ll="ls -la -G"
+alias cls="clear"
+
+# PHP Aliases
+alias phpunit="./vendor/phpunit/phpunit/phpunit --color"
+
+# Docker Aliases
+alias dup="docker compose -f docker/compose.yaml up --build -d"
+alias ddown="docker compose -f docker/compose.yaml down"
+alias dps="docker ps --format \"table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}\""
+
+# Python Aliases
+alias createnv="python3 -m virtualenv --python=/usr/local/bin/python3 .venv"
+alias createnv314="virtualenv --python="/usr/local/bin/python3.14" .venv"
+alias activatenv="source .venv/bin/activate"
+alias deletenv="rm -rf .venv"
+alias deactivatenv="deactivate"
+alias cleanenv="pip freeze | xargs pip uninstall -y"
+alias pipset="pip freeze > requirements.txt"
+alias pinstall="pip install -r requirements.txt"
+alias delcache="find . | grep -E \"(__pycache__|\.pyc|\.pyo$)\" | xargs rm -rf"
+
+# System Functions
+his(){
+  history | grep $1
+}
+
+gitconfig(){
+  REPO_DIR="${2:-.}"
+  
+  # Verificar que estamos en un repositorio git
+  if [ ! -d "$REPO_DIR/.git" ]; then
+      echo "Error: $REPO_DIR no es un repositorio git"
+      exit 1
+  fi
+
+  CURRENT_URL=$(git -C "$REPO_DIR" config --get remote.origin.url)
+
+  if [ -z "$CURRENT_URL" ]; then
+    echo "Error: No existe un remoto 'origin' configurado"
+    exit 1
+  fi
+
+  if [[ ! "$CURRENT_URL" =~ github\.com ]]; then
+    echo "Error: El remoto origin no es de GitHub"
+    exit 1
+  fi
+  
+  echo -n "Perfil GIT (per / pro):"
+  read  profile
+
+  # switch
+  case $profile in
+    per)
+      git config user.email "falces@gmail.com"
+      git config user.name "falces"
+      git config user.signingKey "WSLfalces"
+      NEW_URL="${CURRENT_URL//git@github.com:/git@github.com-falces:}"
+
+      if [ "$CURRENT_URL" = "$NEW_URL" ]; then
+        echo "Error: La URL no contiene 'git@github.com:' o no pudo procesarse"
+        exit 1
+      fi
+
+      ;;
+    pro)
+      git config user.email "javier.rodriguez@create-store.com"
+      git config user.name "javi-rodriguez-create"
+      git config user.signingKey "WSLcreate"
+      NEW_URL="${CURRENT_URL//git@github.com-falces:/git@github.com:}"
+      ;;
+    # default case: raise error
+    *)
+      >&2 echo "ERROR: perfil desconocido: $profile"
+      exit 1
+  esac
+  git -C "$REPO_DIR" remote set-url origin "$NEW_URL"
+  echo "✓ Remoto actualizado"
+  echo "  Anterior: $CURRENT_URL"
+  echo "  Nuevo:    $NEW_URL"
+}
+
+# Python Functions
+vinstall(){
+  pip install $1
+  pip freeze > requirements.txt
+}
+
+# Docker Functions
+dsh(){
+  docker exec -it $1 /bin/sh
+}
+
+dlog() {
+  if [ -z "$2" ]; then
+    docker logs -f "$1" 2>&1
+  else
+    docker logs -f "$1" 2>&1 | grep -i "$2"
+  fi
+}
+
+updateapt(){
+  sudo apt update
+  yes | sudo apt upgrade
+  yes | sudo apt autoremove
+  yes | sudo apt purge
+}
+
+# SONARQUBE ================================
+
+export PATH="${HOME}/Applications/sonar-scanner/bin":$PATH
+
+SONARQUBE_PATH="${HOME}/Applications/sonarqube/bin/macosx-universal-64/sonar.sh"
+SONAR_SCANNER_PATH="${HOME}/Applications/sonar-scanner/bin/sonar-scanner"
+
+sonar_start() {
+  ${SONARQUBE_PATH} start
+}
+
+sonar_status() {
+  ${SONARQUBE_PATH} status
+}
+
+sonar_stop() {
+  ${SONARQUBE_PATH} stop
+}
+
+sonar_cli() {
+  ${SONARQUBE_PATH} console
+}
+
+sonar_scan() {
+  current_dir=$(basename $(pwd))
+  echo "current_dir=${current_dir}"
+
+  current_commit=$(git rev-parse --short HEAD)
+  echo "current_commit=${current_commit}"
+
+  ${SONAR_SCANNER_PATH} \
+  -Dsonar.projectKey=${current_dir} \
+  -Dsonar.projectName=${current_dir} \
+  -Dsonar.projectVersion=${current_commit} \
+  -Dsonar.source=. \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=$1
+}
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p:10k.zsh ]] || source ~/.p10k.zsh
+
+source ~/.p10k.zsh
+
+export PATH="$PATH:$HOME/.local/bin"
+export PYTHONPYCACHEPREFIX="$HOME/.cache/cpython/"
+export PATH="$(brew --prefix)/bin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completionsource /Users/create/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Pyenv
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
+PATH=$(pyenv root)/shims:$PATH
+# EOF Pyenv
