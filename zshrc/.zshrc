@@ -162,8 +162,7 @@ alias ddown="docker compose -f docker/compose.yaml down"
 alias dps="docker ps --format \"table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}\""
 
 # Python Aliases
-alias createnv="python3 -m virtualenv --python=/usr/local/bin/python3 .venv"
-alias createnv314="virtualenv --python="/usr/local/bin/python3.14" .venv"
+alias createnv="virtualenv --python="/opt/homebrew/bin/python3.14" .venv"
 alias activatenv="source .venv/bin/activate"
 alias deletenv="rm -rf .venv"
 alias deactivatenv="deactivate"
@@ -183,21 +182,20 @@ gitconfig(){
   # Verificar que estamos en un repositorio git
   if [ ! -d "$REPO_DIR/.git" ]; then
       echo "Error: $REPO_DIR no es un repositorio git"
-      exit 1
+      return 1
   fi
 
   CURRENT_URL=$(git -C "$REPO_DIR" config --get remote.origin.url)
+  HAS_REMOTE=true
 
   if [ -z "$CURRENT_URL" ]; then
-    echo "Error: No existe un remoto 'origin' configurado"
-    exit 1
+    echo "Aviso: No hay remoto 'origin' configurado, solo se aplicará la configuración de usuario"
+    HAS_REMOTE=false
+  elif [[ ! "$CURRENT_URL" =~ github\.com ]]; then
+    echo "Error: El remoto origin no es de GitHub"
+    return 1
   fi
 
-  if [[ ! "$CURRENT_URL" =~ github\.com ]]; then
-    echo "Error: El remoto origin no es de GitHub"
-    exit 1
-  fi
-  
   echo -n "Perfil GIT (per / pro):"
   read  profile
 
@@ -207,29 +205,36 @@ gitconfig(){
       git config user.email "falces@gmail.com"
       git config user.name "falces"
       git config user.signingKey "WSLfalces"
-      NEW_URL="${CURRENT_URL//git@github.com:/git@github.com-falces:}"
-
-      if [ "$CURRENT_URL" = "$NEW_URL" ]; then
-        echo "Error: La URL no contiene 'git@github.com:' o no pudo procesarse"
-        exit 1
+      if [ "$HAS_REMOTE" = true ]; then
+        NEW_URL="${CURRENT_URL//git@github.com:/git@github.com-falces:}"
+        if [ "$CURRENT_URL" = "$NEW_URL" ]; then
+          echo "Error: La URL no contiene 'git@github.com:' o no pudo procesarse"
+          return 1
+        fi
       fi
-
       ;;
     pro)
       git config user.email "javier.rodriguez@create-store.com"
       git config user.name "javi-rodriguez-create"
       git config user.signingKey "WSLcreate"
-      NEW_URL="${CURRENT_URL//git@github.com-falces:/git@github.com:}"
+      if [ "$HAS_REMOTE" = true ]; then
+        NEW_URL="${CURRENT_URL//git@github.com-falces:/git@github.com:}"
+      fi
       ;;
     # default case: raise error
     *)
       >&2 echo "ERROR: perfil desconocido: $profile"
-      exit 1
+      return 1
   esac
-  git -C "$REPO_DIR" remote set-url origin "$NEW_URL"
-  echo "✓ Remoto actualizado"
-  echo "  Anterior: $CURRENT_URL"
-  echo "  Nuevo:    $NEW_URL"
+
+  echo "✓ Configuración de usuario aplicada"
+
+  if [ "$HAS_REMOTE" = true ]; then
+    git -C "$REPO_DIR" remote set-url origin "$NEW_URL"
+    echo "✓ Remoto actualizado"
+    echo "  Anterior: $CURRENT_URL"
+    echo "  Nuevo:    $NEW_URL"
+  fi
 }
 
 # Python Functions
@@ -321,3 +326,9 @@ fi
 PATH=$(pyenv root)/shims:$PATH
 # EOF Pyenvsource /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /Users/create/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/create/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
