@@ -160,6 +160,8 @@ alias phpunit="./vendor/phpunit/phpunit/phpunit --color"
 alias dup="docker compose -f docker/compose.yaml up --build -d"
 alias ddown="docker compose -f docker/compose.yaml down"
 alias dps="docker ps --format \"table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}\""
+alias dstop="docker stop $(docker ps -a -q)"
+alias drm="docker rm $(docker ps -a -q)"
 
 # Python Aliases
 alias createnv="virtualenv --python="/opt/homebrew/bin/python3.14" .venv"
