@@ -353,3 +353,15 @@ compinit
 
 # opencode
 export PATH=/Users/create/.opencode/bin:$PATH
+
+
+# Added by Antigravity CLI installer
+export PATH="/Users/create/.local/bin:$PATH"
+
+dir(){
+  if [ -z "$1" ]; then
+    ls -la -G
+  else
+    ls -la -G | grep $1
+  fi
+}
