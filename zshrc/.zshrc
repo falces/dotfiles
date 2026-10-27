@@ -188,6 +188,9 @@ alias cleanenv="pip freeze | xargs pip uninstall -y"
 alias pipset="pip freeze > requirements.txt"
 alias pinstall="pip install -r requirements.txt"
 alias delcache="find . | grep -E \"(__pycache__|\.pyc|\.pyo$)\" | xargs rm -rf"
+alias awsms01="ssh -i ~/Documents/Keys/aws.pem deployment@10.50.10.236"
+alias awsms02="ssh -i ~/Documents/Keys/aws.pem deployment@10.50.10.14"
+alias reload="source ~/.zshrc"
 
 # System Functions
 his(){
@@ -364,4 +367,45 @@ dir(){
   else
     ls -la -G | grep $1
   fi
+}
+
+busca() {
+  if [ -z "$1" ]; then
+    echo "Uso: busca <nombre_archivo>"
+    return 1
+  fi
+
+  local archivo="$1"
+  local ruta=""
+
+  echo "=== ¿Dónde quieres buscar '$archivo'? ==="
+  echo "1) En tu carpeta de usuario (~)"
+  echo "2) En la raíz del Mac (/)"
+  echo "3) En una carpeta personalizada"
+  read "opcion?Selecciona una opción (1-3): "
+
+  case "$opcion" in
+    1)
+      ruta="$HOME"
+      ;;
+    2)
+      ruta="/"
+      ;;
+    3)
+      read "ruta?Introduce la ruta personalizada: "
+      # Expandir tilde si el usuario la escribe
+      ruta="${ruta/#\~/$HOME}"
+      if [ ! -d "$ruta" ]; then
+        echo "Error: La ruta '$ruta' no existe."
+        return 1
+      fi
+      ;;
+    *)
+      echo "Opción no válida."
+      return 1
+      ;;
+  esac
+
+  echo "\nBuscando '$archivo' en $ruta..."
+  find "$ruta" -name "*$archivo*" 2>/dev/null
 }
